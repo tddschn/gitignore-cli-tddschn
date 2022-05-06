@@ -33,17 +33,17 @@ def update_gitginore_cache():
              str(gitignore_dir), 'pull', 'origin', 'master'])
 
 
-def read_gitignore_from_cache(template: str) -> str:
+def read_gitignore_from_cache(template: str) -> tuple[int, str]:
     """Read gitignore from cache"""
     if not gitignore_template_dir.exists():
         update_gitginore_cache()
         logger.info('gitignore cache is updated')
     template_file = gitignore_template_dir / f'{template}.gitignore'
     if template_file.exists():
-        return template_file.read_text()
+        return 0, template_file.read_text()
     else:
         # logger.warning(f'{template} not found in cache')
-        return f'#!! ERROR: {template} is undefined. Use list command to see defined gitignore types !!#'
+        return 1, f'#!! ERROR: {template} is undefined. Use list command to see defined gitignore types !!#'
 
 
 def list_templates() -> list[str]:
@@ -91,6 +91,11 @@ def get_args():
                         help='Refresh gitignore cache',
                         action='store_true')
 
+    parser.add_argument('-l',
+                        '--list',
+                        help='Lists available gitignore templates',
+                        action='store_true')
+
     return parser.parse_args()
 
 
@@ -102,12 +107,16 @@ def main():
     templates = args.templates
     out = args.out
     refresh = args.refresh
+    list_templates = args.list
     if refresh:
         update_gitginore_cache()
         logger.info('gitignore cache is updated')
         # return
+    if list_templates:
+        print('\n'.join(list_templates()))
+        return
     for template in templates:
-        out.write(read_gitignore_from_cache(template))
+        out.write(read_gitignore_from_cache(template)[1])
         out.write('\n')
         out.flush()
 
