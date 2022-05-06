@@ -35,6 +35,9 @@ def update_gitginore_cache():
 
 def read_gitignore_from_cache(template: str) -> str:
     """Read gitignore from cache"""
+    if not gitignore_template_dir.exists():
+        update_gitginore_cache()
+        logger.info('gitignore cache is updated')
     template_file = gitignore_template_dir / f'{template}.gitignore'
     if template_file.exists():
         return template_file.read_text()
