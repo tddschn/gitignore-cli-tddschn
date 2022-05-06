@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gitignore-cli-tddschn"
-version = "0.1.5"
+version = "0.1.6"
 description = ""
 authors = ["Xinyuan Chen <45612704+tddschn@users.noreply.github.com>"]
 license = "MIT"

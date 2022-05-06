@@ -46,7 +46,7 @@ def read_gitignore_from_cache(template: str) -> tuple[int, str]:
         return 1, f'#!! ERROR: {template} is undefined. Use list command to see defined gitignore types !!#'
 
 
-def list_templates() -> list[str]:
+def list_gitignore_templates() -> list[str]:
     """List gitignore templates"""
     # update_gitginore_cache()
     templates = [f.stem for f in gitignore_template_dir.glob('*.gitignore')]
@@ -113,7 +113,7 @@ def main():
         logger.info('gitignore cache is updated')
         # return
     if list_templates:
-        print('\n'.join(list_templates()))
+        print('\n'.join(list_gitignore_templates()))
         return
     if not templates:
         print('No templates specified', file=sys.stderr)
