@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "gitignore-cli-tddschn"
-version = "0.1.6"
-description = ""
+version = "0.1.7"
+description = "Fast gitignore CLI tool with cached templates"
 authors = ["Xinyuan Chen <45612704+tddschn@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
@@ -13,6 +13,7 @@ classifiers = [
 keywords = ["gitignore", "cli", "git"]
 [tool.poetry.scripts]
 gitignore = "gitignore_cli_tddschn.cli:main"
+gi = "gitignore_cli_tddschn.cli:main"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/tddschn/gitignore-cli-tddschn/issues"
