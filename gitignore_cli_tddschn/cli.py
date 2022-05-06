@@ -62,7 +62,7 @@ def get_args():
 
     parser.add_argument('templates',
                         metavar='TEMPLATES',
-                        nargs='+',
+                        nargs='*',
                         help='A positional argument')
 
     # parser.add_argument('-a',
@@ -114,6 +114,9 @@ def main():
         # return
     if list_templates:
         print('\n'.join(list_templates()))
+        return
+    if not templates:
+        print('No templates specified', file=sys.stderr)
         return
     for template in templates:
         out.write(read_gitignore_from_cache(template)[1])
