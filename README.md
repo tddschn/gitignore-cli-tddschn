@@ -35,8 +35,7 @@ $ pip install gitignore-cli-tddschn
 
 ## Usage
 
-You can either invoke this tool with `gitignore-cli-tddschn` or `gitignore`,
-`--help` is unsupported when using the latter.
+You can either invoke gitignore CLI with `gi` or `gitignore`.
 
 ```
 $ gitignore -h

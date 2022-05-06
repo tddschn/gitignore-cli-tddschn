@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gitignore-cli-tddschn"
-version = "0.1.7"
+version = "0.1.8"
 description = "Fast gitignore CLI tool with cached templates"
 authors = ["Xinyuan Chen <45612704+tddschn@users.noreply.github.com>"]
 license = "MIT"
@@ -20,6 +20,7 @@ gi = "gitignore_cli_tddschn.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+utils-tddschn = "^0.1.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

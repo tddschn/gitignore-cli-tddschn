@@ -139,9 +139,9 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "utils-tddschn"
-version = "0.1.4"
+version = "0.1.5"
 description = ""
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.10,<4.0"
 
@@ -164,7 +164,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "d0e2c52040c710bf9c00eacac9b3215df5e38375ff4476de30de87b87602455d"
+content-hash = "9832f90ac889106d47d2deebf9ac1c4c95bbff7f7d5841def4acded15a14df6f"
 
 [metadata.files]
 atomicwrites = [
@@ -221,8 +221,8 @@ toml = [
     {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
 ]
 utils-tddschn = [
-    {file = "utils-tddschn-0.1.4.tar.gz", hash = "sha256:e44c5f96d9da1d7c09935fd3c17cc1fa9127b756b6078af472f5e10fb6e18a56"},
-    {file = "utils_tddschn-0.1.4-py3-none-any.whl", hash = "sha256:14e2fcba91103eabf488be2e3843886aa61cfa5d30cb211d6f9b9f6527de1785"},
+    {file = "utils-tddschn-0.1.5.tar.gz", hash = "sha256:2a6160c9cefb9a695452de48e36d76b1ae01dfe3b36e2e9b7411bc2b1399dbf8"},
+    {file = "utils_tddschn-0.1.5-py3-none-any.whl", hash = "sha256:a758ef04369d6115d74a17f75999ec2b4714828eebdbaf1058604e13b02f3b8f"},
 ]
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},

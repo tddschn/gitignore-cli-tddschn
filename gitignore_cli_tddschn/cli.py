@@ -10,6 +10,7 @@ import sys
 
 from . import __version__, __app_name_slug__, logger, __app_name__
 from pathlib import Path
+from utils_tddschn.git_utils import git_root_dir
 
 cache_dir = Path.home() / '.cache' / __app_name_slug__
 gitignore_url = 'https://github.com/toptal/gitignore'
@@ -79,12 +80,13 @@ def get_args():
     #                     type=int,
     #                     default=0)
 
-    parser.add_argument('-o',
-                        '--out',
-                        help='Output to file, append if exists',
-                        metavar='FILE',
-                        type=argparse.FileType('at'),
-                        default=sys.stdout)
+    parser.add_argument(
+        '-o',
+        '--out',
+        help='Output to file, append if exists, if -a or -w is not specified',
+        metavar='FILE',
+        type=argparse.FileType('at'),
+        default=sys.stdout)
 
     parser.add_argument('-r',
                         '--refresh',
@@ -96,6 +98,18 @@ def get_args():
                         help='Lists available gitignore templates',
                         action='store_true')
 
+    parser.add_argument(
+        '-a',
+        '--append',
+        help='Append to the .gitignore of current git repository',
+        action='store_true')
+
+    parser.add_argument(
+        '-w',
+        '--write',
+        help='Write to the .gitignore of current git repository (overwrite)',
+        action='store_true')
+
     return parser.parse_args()
 
 
@@ -105,7 +119,12 @@ def main():
 
     args = get_args()
     templates = args.templates
-    out = args.out
+    if args.append:
+        out = open(Path(git_root_dir()) / 'gitignore', 'at')
+    elif args.write:
+        out = open(Path(git_root_dir()) / 'gitignore', 'wt')
+    else:
+        out = args.out
     refresh = args.refresh
     list_templates = args.list
     if refresh:
