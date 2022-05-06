@@ -117,6 +117,7 @@ def get_args():
 def main():
     """Make a jazz noise here"""
 
+    WARN_NOT_GIT_REPO = False
     args = get_args()
     templates = args.templates
     try:
@@ -127,7 +128,7 @@ def main():
         else:
             out = args.out
     except:
-        logger.error(f'{Path().absolute()} is not a git repository')
+        WARN_NOT_GIT_REPO = True
         logger.info('Writing to stdout')
         out = args.out
     if not args.append and not args.write:
@@ -149,6 +150,11 @@ def main():
         out.write(read_gitignore_from_cache(template)[1])
         out.write('\n')
         out.flush()
+
+    if WARN_NOT_GIT_REPO:
+        print(
+            f'{Path().absolute()} is not a git repository, outputted to stdout instead.',
+            file=sys.stderr)
 
 
 if __name__ == '__main__':
