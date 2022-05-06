@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "gitignore-cli-tddschn"
+version = "0.1.9"
+description = "Fast gitignore CLI tool with cached templates"
+authors = ["Xinyuan Chen <45612704+tddschn@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/tddschn/gitignore-cli-tddschn"
+repository = "https://github.com/tddschn/gitignore-cli-tddschn"
+classifiers = [
+	"Topic :: Utilities"
+]
+keywords = ["gitignore", "cli", "git"]
+[tool.poetry.scripts]
+gitignore = "gitignore_cli_tddschn.cli:main"
+gi = "gitignore_cli_tddschn.cli:main"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/tddschn/gitignore-cli-tddschn/issues"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+utils-tddschn = "^0.1.5"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+toml = "^0.10.2"
+yapf = "^0.32.0"
+better-exceptions = "^0.3.3"
+bump2version = "^1.0.1"
+logging-utils-tddschn = "^0.1.8"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
