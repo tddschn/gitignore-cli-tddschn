@@ -39,7 +39,7 @@ You can either invoke gitignore CLI with `gi` or `gitignore`.
 
 ```
 $ gitignore -h
-usage: gitignore [-h] [-o FILE] [-r] [-l] [TEMPLATES ...]
+usage: gitignore [-h] [-o FILE] [-r] [-l] [-a] [-w] [TEMPLATES ...]
 
 gitignore CLI
 
@@ -48,9 +48,11 @@ positional arguments:
 
 options:
   -h, --help           show this help message and exit
-  -o FILE, --out FILE  Output to file, append if exists (default: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>)
+  -o FILE, --out FILE  Output to file, append if exists, if -a or -w is not specified (default: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>)
   -r, --refresh        Refresh gitignore cache (default: False)
   -l, --list           Lists available gitignore templates (default: False)
+  -a, --append         Append to the .gitignore of current git repository (default: False)
+  -w, --write          Write to the .gitignore of current git repository (overwrite) (default: False)
 ```
 
 ## Develop

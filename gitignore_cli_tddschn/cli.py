@@ -124,7 +124,13 @@ def main():
             out = open(Path(git_root_dir()) / '.gitignore', 'at')
         elif args.write:
             out = open(Path(git_root_dir()) / '.gitignore', 'wt')
-    finally:
+        else:
+            out = args.out
+    except:
+        logger.error(f'{Path().absolute()} is not a git repository')
+        logger.info('Writing to stdout')
+        out = args.out
+    if not args.append and not args.write:
         out = args.out
 
     refresh = args.refresh
