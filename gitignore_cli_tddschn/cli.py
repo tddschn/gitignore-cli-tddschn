@@ -9,14 +9,8 @@ import argparse
 import sys
 
 from . import __version__, __app_name_slug__, logger, __app_name__
-import io, json, time
 from pathlib import Path
-import typer
 
-app = typer.Typer(name='jwc-news')
-
-jwc_url = 'http://www.jwc.fudan.edu.cn'
-jwc_news_url = 'http://www.jwc.fudan.edu.cn/9397/list.htm'
 cache_dir = Path.home() / '.cache' / __app_name_slug__
 gitignore_url = 'https://github.com/toptal/gitignore'
 gitignore_dir = cache_dir / 'gitignore'
