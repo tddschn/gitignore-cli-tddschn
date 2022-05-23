@@ -10,7 +10,7 @@ import sys
 
 from . import __version__, __app_name_slug__, logger, __app_name__
 from pathlib import Path
-from utils_tddschn.git_utils import git_root_dir
+from utils_tddschn.sync.git import git_root_dir, git_get_current_branch
 
 cache_dir = Path.home() / '.cache' / __app_name_slug__
 gitignore_url = 'https://github.com/toptal/gitignore'
@@ -25,13 +25,15 @@ def update_gitginore_cache():
     """Clone / pull gitignore to cache_dir"""
     cache_dir.mkdir(parents=True, exist_ok=True)
     import subprocess
+
     if not gitignore_dir.exists():
         subprocess.run(['git', 'clone', gitignore_url, str(gitignore_dir)])
     else:
         # run git -C gitignore_dir pull origin master
+        current_branch = git_get_current_branch()
         subprocess.run(
-            ['git', '-C',
-             str(gitignore_dir), 'pull', 'origin', 'master'])
+            ['git', '-C', str(gitignore_dir), 'pull', 'origin', current_branch]
+        )
 
 
 def read_gitignore_from_cache(template: str) -> tuple[int, str]:
@@ -44,7 +46,10 @@ def read_gitignore_from_cache(template: str) -> tuple[int, str]:
         return 0, template_file.read_text()
     else:
         # logger.warning(f'{template} not found in cache')
-        return 1, f'#!! ERROR: {template} is undefined. Use list command to see defined gitignore types !!#'
+        return (
+            1,
+            f'#!! ERROR: {template} is undefined. Use list command to see defined gitignore types !!#',
+        )
 
 
 def list_gitignore_templates() -> list[str]:
@@ -59,12 +64,12 @@ def get_args():
 
     parser = argparse.ArgumentParser(
         description='gitignore CLI',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
 
-    parser.add_argument('templates',
-                        metavar='TEMPLATES',
-                        nargs='*',
-                        help='A positional argument')
+    parser.add_argument(
+        'templates', metavar='TEMPLATES', nargs='*', help='A positional argument'
+    )
 
     # parser.add_argument('-a',
     #                     '--arg',
@@ -86,29 +91,30 @@ def get_args():
         help='Output to file, append if exists, if -a or -w is not specified',
         metavar='FILE',
         type=argparse.FileType('at'),
-        default=sys.stdout)
+        default=sys.stdout,
+    )
 
-    parser.add_argument('-r',
-                        '--refresh',
-                        help='Refresh gitignore cache',
-                        action='store_true')
+    parser.add_argument(
+        '-r', '--refresh', help='Refresh gitignore cache', action='store_true'
+    )
 
-    parser.add_argument('-l',
-                        '--list',
-                        help='Lists available gitignore templates',
-                        action='store_true')
+    parser.add_argument(
+        '-l', '--list', help='Lists available gitignore templates', action='store_true'
+    )
 
     parser.add_argument(
         '-a',
         '--append',
         help='Append to the .gitignore of current git repository',
-        action='store_true')
+        action='store_true',
+    )
 
     parser.add_argument(
         '-w',
         '--write',
         help='Write to the .gitignore of current git repository (overwrite)',
-        action='store_true')
+        action='store_true',
+    )
 
     return parser.parse_args()
 
@@ -154,7 +160,8 @@ def main():
     if WARN_NOT_GIT_REPO:
         print(
             f'{Path().absolute()} is not a git repository, outputted to stdout instead.',
-            file=sys.stderr)
+            file=sys.stderr,
+        )
 
 
 if __name__ == '__main__':
