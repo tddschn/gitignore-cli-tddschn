@@ -17,12 +17,16 @@ cache_dir = Path.home() / '.cache' / __app_name_slug__
 gitignore_url = 'https://github.com/toptal/gitignore'
 gitignore_dir = cache_dir / 'gitignore'
 gitignore_template_dir = gitignore_dir / 'templates'
-gitignore_template_dir_custom_env = os.getenv('GITIGNORE_CLI_TEMPLATE_DIR')
-gitignore_template_dir_custom: Path | None
-if gitignore_template_dir_custom_env:
-    gitignore_template_dir_custom = Path(gitignore_template_dir_custom_env)
-else:
-    gitignore_template_dir_custom = None
+
+
+def get_custom_templates_dir_from_env_var() -> Path | None:
+    gitignore_template_dir_custom_env = os.getenv('GITIGNORE_CLI_TEMPLATE_DIR')
+    if gitignore_template_dir_custom_env:
+        custom_templates_dir = Path(gitignore_template_dir_custom_env)
+    else:
+        custom_templates_dir = None
+    return custom_templates_dir
+
 
 # cache_file = cache_dir / 'data.json'
 
@@ -43,14 +47,14 @@ def update_gitginore_cache():
         )
 
 
-def read_gitignore_from_cache(template: str) -> tuple[int, str]:
+def read_gitignore_from_cache(template: str, custom_templates_dir) -> tuple[int, str]:
     """Read gitignore from cache"""
     if not gitignore_template_dir.exists():
         update_gitginore_cache()
         logger.info('gitignore cache is updated')
     template_file = gitignore_template_dir / f'{template}.gitignore'
-    if gitignore_template_dir_custom:
-        template_file_custom = gitignore_template_dir_custom / f'{template}.gitignore'
+    if custom_templates_dir:
+        template_file_custom = custom_templates_dir / f'{template}.gitignore'
         if template_file_custom.exists():
             template_file = template_file_custom
             return 0, template_file.read_text()
@@ -64,14 +68,12 @@ def read_gitignore_from_cache(template: str) -> tuple[int, str]:
         )
 
 
-def list_gitignore_templates() -> list[str]:
+def list_gitignore_templates(custom_templates_dir) -> list[str]:
     """List gitignore templates"""
     # update_gitginore_cache()
     templates = [f.stem for f in gitignore_template_dir.glob('*.gitignore')]
-    if gitignore_template_dir_custom:
-        templates.extend(
-            [f.stem for f in gitignore_template_dir_custom.glob('*.gitignore')]
-        )
+    if custom_templates_dir:
+        templates.extend([f.stem for f in custom_templates_dir.glob('*.gitignore')])
         templates = list(set(templates))
     return templates
 
@@ -101,6 +103,16 @@ def get_args():
     #                     metavar='int',
     #                     type=int,
     #                     default=0)
+
+    parser.add_argument(
+        '-c',
+        '--custom-templates-dir',
+        help=f'''Custom templates dir, 
+        {__app_name__} will look for templates named *.gitignore in this dir first.
+        Defaults to the value of $GITIGNORE_CLI_TEMPLATE_DIR env var''',
+        type=Path,
+        default=get_custom_templates_dir_from_env_var(),
+    )
 
     parser.add_argument(
         '-o',
@@ -143,6 +155,7 @@ def main():
     WARN_NOT_GIT_REPO = False
     args = get_args()
     templates = args.templates
+    custom_templates_dir = args.custom_templates_dir
     try:
         if args.append:
             out = open(Path(git_root_dir()) / '.gitignore', 'at')
@@ -164,13 +177,18 @@ def main():
         logger.info('gitignore cache is updated')
         # return
     if list_templates:
-        print('\n'.join(list_gitignore_templates()))
+        print('\n'.join(list_gitignore_templates(custom_templates_dir)))
         return
     if not templates:
         print('No templates specified', file=sys.stderr)
+        print(f'Run `{Path(sys.argv[0]).stem} --help\' to get help', file=sys.stderr)
+        print(
+            f'Run `{Path(sys.argv[0]).stem} --list\' to see available templates',
+            file=sys.stderr,
+        )
         return
     for template in templates:
-        out.write(read_gitignore_from_cache(template)[1])
+        out.write(read_gitignore_from_cache(template, custom_templates_dir)[1])
         out.write('\n')
         out.flush()
 
