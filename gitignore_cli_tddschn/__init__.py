@@ -1,4 +1,4 @@
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 __app_name__ = 'gitignore CLI'
 __app_name_slug__ = 'gitignore-cli'
 
